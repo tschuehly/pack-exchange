@@ -1,0 +1,746 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Microsoft Graph Mail API",
+    "description": "Focused read-only Microsoft Graph v1.0 surface for signed-in-user Outlook mailbox inspection.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://graph.microsoft.com/v1.0"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "Messages"
+    },
+    {
+      "name": "MailFolders"
+    }
+  ],
+  "paths": {
+    "/me": {
+      "get": {
+        "operationId": "user.get",
+        "summary": "Get the signed-in Microsoft Graph user",
+        "description": "Returns the signed-in user identity used by the OAuth connected account.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed-in user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "User.Read"
+            ]
+          }
+        ]
+      }
+    },
+    "/me/messages": {
+      "get": {
+        "operationId": "messages.list",
+        "summary": "List mailbox messages",
+        "description": "Lists messages across the signed-in user's mailbox. Use OData query parameters to select fields, filter by receivedDateTime, order newest first, and page with Microsoft Graph nextLink values.",
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Prefer"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/OrderBy"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          },
+          {
+            "$ref": "#/components/parameters/Top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageCollectionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "Mail.Read"
+            ]
+          }
+        ]
+      }
+    },
+    "/me/messages/{messageId}": {
+      "get": {
+        "operationId": "messages.get",
+        "summary": "Get a message",
+        "description": "Reads one message by Microsoft Graph message id.",
+        "tags": [
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MessageId"
+          },
+          {
+            "$ref": "#/components/parameters/Prefer"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "Mail.Read"
+            ]
+          }
+        ]
+      }
+    },
+    "/me/mailFolders": {
+      "get": {
+        "operationId": "mailFolders.list",
+        "summary": "List top-level mail folders",
+        "description": "Lists top-level mail folders for the signed-in user's mailbox.",
+        "tags": [
+          "MailFolders"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Select"
+          },
+          {
+            "$ref": "#/components/parameters/Top"
+          },
+          {
+            "$ref": "#/components/parameters/IncludeHiddenFolders"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mail folder page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailFolderCollectionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "Mail.Read"
+            ]
+          }
+        ]
+      }
+    },
+    "/me/mailFolders/{mailFolderId}": {
+      "get": {
+        "operationId": "mailFolders.get",
+        "summary": "Get a mail folder",
+        "description": "Reads one mail folder by id or Microsoft Graph well-known folder name.",
+        "tags": [
+          "MailFolders"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MailFolderId"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mail folder.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MailFolder"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "Mail.Read"
+            ]
+          }
+        ]
+      }
+    },
+    "/me/mailFolders/{mailFolderId}/messages": {
+      "get": {
+        "operationId": "mailFolders.messages.list",
+        "summary": "List messages in a mail folder",
+        "description": "Lists messages in one mailbox folder. The folder id can be an id or a Microsoft Graph well-known folder name such as inbox, sentitems, junkemail, deleteditems, archive, clutter, or drafts.",
+        "tags": [
+          "MailFolders",
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MailFolderId"
+          },
+          {
+            "$ref": "#/components/parameters/Prefer"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/OrderBy"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          },
+          {
+            "$ref": "#/components/parameters/Top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageCollectionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "Mail.Read"
+            ]
+          }
+        ]
+      }
+    },
+    "/me/mailFolders/{mailFolderId}/messages/{messageId}": {
+      "get": {
+        "operationId": "mailFolders.messages.get",
+        "summary": "Get a message in a mail folder",
+        "description": "Reads one message scoped to one mailbox folder.",
+        "tags": [
+          "MailFolders",
+          "Messages"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/MailFolderId"
+          },
+          {
+            "$ref": "#/components/parameters/MessageId"
+          },
+          {
+            "$ref": "#/components/parameters/Prefer"
+          },
+          {
+            "$ref": "#/components/parameters/Select"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": [
+          {
+            "microsoftGraphOAuth": [
+              "Mail.Read"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "microsoftGraphOAuth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+            "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+            "scopes": {
+              "openid": "Sign in the user.",
+              "profile": "Read basic user profile information.",
+              "email": "Read the user's email address.",
+              "offline_access": "Maintain access with refresh tokens.",
+              "User.Read": "Read the signed-in user's profile.",
+              "Mail.Read": "Read the signed-in user's mail."
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "MailFolderId": {
+        "name": "mailFolderId",
+        "in": "path",
+        "required": true,
+        "description": "Mail folder id or well-known folder name.",
+        "schema": {
+          "type": "string"
+        },
+        "examples": {
+          "inbox": {
+            "value": "inbox"
+          },
+          "sentItems": {
+            "value": "sentitems"
+          }
+        }
+      },
+      "MessageId": {
+        "name": "messageId",
+        "in": "path",
+        "required": true,
+        "description": "Microsoft Graph message id. Requests that persist ids should send Prefer: IdType=\"ImmutableId\".",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Prefer": {
+        "name": "Prefer",
+        "in": "header",
+        "required": false,
+        "description": "Microsoft Graph preference header. Use IdType=\"ImmutableId\" when storing ids and outlook.body-content-type=\"text\" when reading body or uniqueBody fields.",
+        "schema": {
+          "type": "string"
+        },
+        "examples": {
+          "immutableId": {
+            "value": "IdType=\"ImmutableId\""
+          },
+          "textBody": {
+            "value": "outlook.body-content-type=\"text\""
+          },
+          "immutableIdAndTextBody": {
+            "value": "IdType=\"ImmutableId\", outlook.body-content-type=\"text\""
+          }
+        }
+      },
+      "Filter": {
+        "name": "$filter",
+        "in": "query",
+        "required": false,
+        "description": "OData filter expression, such as receivedDateTime ge 2026-06-03T00:00:00Z or conversationId eq '{conversationId}'.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OrderBy": {
+        "name": "$orderby",
+        "in": "query",
+        "required": false,
+        "description": "OData order expression, such as receivedDateTime desc.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Select": {
+        "name": "$select",
+        "in": "query",
+        "required": false,
+        "description": "Comma-separated Microsoft Graph fields to return.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Top": {
+        "name": "$top",
+        "in": "query",
+        "required": false,
+        "description": "Maximum number of items to return in this page.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "IncludeHiddenFolders": {
+        "name": "includeHiddenFolders",
+        "in": "query",
+        "required": false,
+        "description": "Whether hidden folders are included in folder list results.",
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Microsoft Graph error response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "userPrincipalName": {
+            "type": "string"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "givenName": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          }
+        }
+      },
+      "MessageCollectionResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "@odata.context": {
+            "type": "string"
+          },
+          "@odata.count": {
+            "type": "integer"
+          },
+          "@odata.nextLink": {
+            "type": "string",
+            "format": "uri",
+            "description": "Opaque URL for the next page. Request it directly."
+          },
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "@odata.etag": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sentDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "hasAttachments": {
+            "type": "boolean"
+          },
+          "internetMessageId": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "bodyPreview": {
+            "type": "string"
+          },
+          "importance": {
+            "type": "string",
+            "enum": [
+              "low",
+              "normal",
+              "high"
+            ]
+          },
+          "parentFolderId": {
+            "type": "string"
+          },
+          "conversationId": {
+            "type": "string"
+          },
+          "conversationIndex": {
+            "type": "string"
+          },
+          "isRead": {
+            "type": "boolean"
+          },
+          "isDraft": {
+            "type": "boolean"
+          },
+          "webLink": {
+            "type": "string",
+            "format": "uri"
+          },
+          "inferenceClassification": {
+            "type": "string",
+            "enum": [
+              "focused",
+              "other"
+            ]
+          },
+          "body": {
+            "$ref": "#/components/schemas/ItemBody"
+          },
+          "uniqueBody": {
+            "$ref": "#/components/schemas/ItemBody"
+          },
+          "from": {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          "toRecipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            }
+          },
+          "ccRecipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            }
+          },
+          "bccRecipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            }
+          },
+          "replyTo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recipient"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ItemBody": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "contentType": {
+            "type": "string",
+            "enum": [
+              "text",
+              "html"
+            ]
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "Recipient": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "emailAddress": {
+            "$ref": "#/components/schemas/EmailAddress"
+          }
+        }
+      },
+      "EmailAddress": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "MailFolderCollectionResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "@odata.context": {
+            "type": "string"
+          },
+          "@odata.count": {
+            "type": "integer"
+          },
+          "@odata.nextLink": {
+            "type": "string",
+            "format": "uri",
+            "description": "Opaque URL for the next page. Request it directly."
+          },
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MailFolder"
+            }
+          }
+        }
+      },
+      "MailFolder": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "parentFolderId": {
+            "type": "string"
+          },
+          "childFolderCount": {
+            "type": "integer"
+          },
+          "unreadItemCount": {
+            "type": "integer"
+          },
+          "totalItemCount": {
+            "type": "integer"
+          },
+          "sizeInBytes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "isHidden": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/GraphError"
+          }
+        }
+      },
+      "GraphError": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "innerError": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  }
+}

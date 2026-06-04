@@ -1,0 +1,29 @@
+# Microsoft 365 Outlook mail via Microsoft Graph v1.0.
+#
+# The gateway namespace is `gateway.outlook`. OAuth credentials are registered
+# under provider key `microsoft-graph`; client credentials belong in the host
+# admin OAuth app registry, never in this pack.
+- url: graph-mail-v1.json
+  name: outlook
+  type: openapi
+  auth: oauth2
+  oauth2:
+    provider: microsoft-graph
+    auth-url: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+    token-url: https://login.microsoftonline.com/common/oauth2/v2.0/token
+    scopes: >-
+      openid profile email offline_access User.Read Mail.Read
+    identity:
+      url: https://graph.microsoft.com/v1.0/me
+      method: GET
+      auth: bearer
+      account-id-field: id
+      display-name-field: userPrincipalName
+  operation-ids:
+    - user.get
+    - messages.list
+    - messages.get
+    - mailFolders.list
+    - mailFolders.get
+    - mailFolders.messages.list
+    - mailFolders.messages.get

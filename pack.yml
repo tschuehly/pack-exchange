@@ -1,0 +1,12 @@
+name: exchange
+description: "Microsoft 365 Outlook mail integration via Microsoft Graph. Declares the microsoft-graph OAuth2 provider and a focused read-only gateway.outlook mailbox inspection surface for host-managed email ingestion."
+version: 0.1.0
+author: Thomas Schilling
+url: https://github.com/tschuehly/pack-exchange
+tags:
+  - integrations
+  - microsoft-365
+  - outlook
+  - exchange
+  - email
+  - openapi
