@@ -220,6 +220,9 @@ Every message list or get request that stores message ids includes:
 Prefer: IdType="ImmutableId"
 ```
 
+Candidate discovery does not request or store message ids and does not send
+an immutable-id preference.
+
 Every message read that requests `body` or `uniqueBody` includes:
 
 ```text
@@ -237,7 +240,7 @@ GET /me/messages
   ?$filter=receivedDateTime ge {instant}
   &$orderby=receivedDateTime desc
   &$top={pageSize}
-  &$select=id,conversationId,subject,from,sender,receivedDateTime,sentDateTime,bodyPreview,parentFolderId,webLink,categories,inferenceClassification,hasAttachments
+  &$select=conversationId,receivedDateTime
 ```
 
 Conversation fetch:
